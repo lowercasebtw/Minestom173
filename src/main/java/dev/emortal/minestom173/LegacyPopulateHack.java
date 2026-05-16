@@ -27,8 +27,9 @@ public class LegacyPopulateHack {
     private static void runPopulators(final InstanceContainer world, final Chunk chunk) {
         final OldChunkGenerator generator = (OldChunkGenerator) world.getChunkLoader();
         setHasPopulated(chunk, true);
-        AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
-        generator.populateChunk(new WorldContext(world, batch, world, WorldContext.LightGetter.of(world), generator.getRandom()), chunk.getChunkX(), chunk.getChunkZ());
+
+        final AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
+        generator.populateChunk(new WorldContext(world, batch, world, (WorldContext.LightGetter) world, generator.getRandom()), chunk.getChunkX(), chunk.getChunkZ());
         batch.apply(world, null);
     }
 
