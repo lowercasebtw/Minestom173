@@ -11,7 +11,7 @@ import java.util.Random;
 public record WorldContext(Block.Getter blockGetter, Block.Setter blockSetter, Biome.Setter biomeSetter,
                            LightGetter lightGetter, Random random) {
     public WorldContext(final Chunk chunk, final Instance instance, final Random random) {
-        this(chunk, chunk, chunk, (LightGetter) instance, random);
+        this(chunk, chunk, chunk, new LightGetter(instance), random);
     }
 
     public Block getBlock(final int blockX, final int blockY, final int blockZ, final Block.Getter.Condition condition) {
@@ -48,9 +48,19 @@ public record WorldContext(Block.Getter blockGetter, Block.Setter blockSetter, B
         }
     }
 
-    public interface LightGetter {
-        int getSkyLight(final int blockX, final int blockY, final int blockZ);
+    public static final class LightGetter {
+        private final Instance instance;
 
-        int getBlockLight(final int blockX, final int blockY, final int blockZ);
+        public LightGetter(final Instance instance) {
+            this.instance = instance;
+        }
+
+        public int getSkyLight(final int blockX, final int blockY, final int blockZ) {
+            return this.instance.getSkyLight(blockX, blockY, blockZ);
+        }
+
+        public int getBlockLight(final int blockX, final int blockY, final int blockZ) {
+            return this.instance.getBlockLight(blockX, blockY, blockZ);
+        }
     }
 }

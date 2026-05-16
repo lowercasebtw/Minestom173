@@ -638,14 +638,14 @@ public class ChunkProviderOverworld implements ChunkLoader, OldChunkGenerator {
     }
 
     @Override
-    public @Nullable Chunk loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public @Nullable Chunk loadChunk(final @NotNull Instance instance, final int chunkX, final int chunkZ) {
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
         generateUnpopulatedChunkData(new WorldContext(chunk, instance, this.random), chunkX, chunkZ);
         return chunk;
     }
 
     @Override
-    public void saveChunk(@NotNull Chunk chunk) {
+    public void saveChunk(final @NotNull Chunk chunk) {
     }
 
     @Override

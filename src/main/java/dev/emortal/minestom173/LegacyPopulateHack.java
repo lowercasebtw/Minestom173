@@ -11,6 +11,8 @@ import net.minestom.server.instance.batch.AbsoluteBlockBatch;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.timer.TaskSchedule;
 
+import java.util.Objects;
+
 public class LegacyPopulateHack {
     private static final Tag<Boolean> HAS_POPULATED = Tag.Boolean("hasPopulated");
 
@@ -19,9 +21,7 @@ public class LegacyPopulateHack {
     }
 
     private static boolean hasPopulated(final Chunk chunk) {
-        Boolean bool = chunk.getTag(HAS_POPULATED);
-        if (bool == null) return false;
-        return bool;
+        return Objects.requireNonNullElse(chunk.getTag(HAS_POPULATED), false);
     }
 
     private static void runPopulators(final InstanceContainer world, final Chunk chunk) {
@@ -29,7 +29,7 @@ public class LegacyPopulateHack {
         setHasPopulated(chunk, true);
 
         final AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
-        generator.populateChunk(new WorldContext(world, batch, world, (WorldContext.LightGetter) world, generator.getRandom()), chunk.getChunkX(), chunk.getChunkZ());
+        generator.populateChunk(new WorldContext(world, batch, world, new WorldContext.LightGetter(world), generator.getRandom()), chunk.getChunkX(), chunk.getChunkZ());
         batch.apply(world, null);
     }
 
@@ -40,43 +40,41 @@ public class LegacyPopulateHack {
     private static void handleEvent(InstanceChunkLoadEvent event) {
         event.getInstance().scheduler().buildTask(() -> {
             final InstanceContainer world = (InstanceContainer) event.getInstance();
-
-            final Chunk center = event.getChunk();
-            final int centerX = center.getChunkX();
-            final int centerZ = center.getChunkZ();
-
             final ChunkLoader generator = world.getChunkLoader();
+            if (generator instanceof OldChunkGenerator) {
+                final Chunk center = event.getChunk();
+                final int centerX = center.getChunkX();
+                final int centerZ = center.getChunkZ();
 
-            if (!(generator instanceof OldChunkGenerator)) return; // not our generator
+                setHasPopulated(center, false);
+                final Chunk topRight = world.getChunk(centerX + 1, centerZ + 1);
+                final Chunk top = world.getChunk(centerX, centerZ + 1);
+                final Chunk right = world.getChunk(centerX + 1, centerZ);
+                final Chunk left = world.getChunk(centerX - 1, centerZ);
+                final Chunk topLeft = world.getChunk(centerX - 1, centerZ + 1);
+                final Chunk bottom = world.getChunk(centerX, centerZ - 1);
+                final Chunk bottomRight = world.getChunk(centerX + 1, centerZ - 1);
+                final Chunk bottomLeft = world.getChunk(centerX - 1, centerZ - 1);
 
-            setHasPopulated(center, false);
-            final Chunk topRight = world.getChunk(centerX + 1, centerZ + 1);
-            final Chunk top = world.getChunk(centerX, centerZ + 1);
-            final Chunk right = world.getChunk(centerX + 1, centerZ);
-            final Chunk left = world.getChunk(centerX - 1, centerZ);
-            final Chunk topLeft = world.getChunk(centerX - 1, centerZ + 1);
-            final Chunk bottom = world.getChunk(centerX, centerZ - 1);
-            final Chunk bottomRight = world.getChunk(centerX + 1, centerZ - 1);
-            final Chunk bottomLeft = world.getChunk(centerX - 1, centerZ - 1);
+                // try populate us
+                if (!hasPopulated(center) && topRight != null && top != null && right != null) {
+                    runPopulators(world, center);
+                }
 
-            // try populate us
-            if (!hasPopulated(center) && topRight != null && top != null && right != null) {
-                runPopulators(world, center);
-            }
+                // try populate left
+                if (left != null && !hasPopulated(left) && topLeft != null && top != null) {
+                    runPopulators(world, left);
+                }
 
-            // try populate left
-            if (left != null && !hasPopulated(left) && topLeft != null && top != null) {
-                runPopulators(world, left);
-            }
+                // try populate bottom
+                if (bottom != null && !hasPopulated(bottom) && bottomRight != null && right != null) {
+                    runPopulators(world, bottom);
+                }
 
-            // try populate bottom
-            if (bottom != null && !hasPopulated(bottom) && bottomRight != null && right != null) {
-                runPopulators(world, bottom);
-            }
-
-            // try populate bottom left
-            if (bottomLeft != null && !hasPopulated(bottomLeft) && bottom != null && left != null) {
-                runPopulators(world, bottomLeft);
+                // try populate bottom left
+                if (bottomLeft != null && !hasPopulated(bottomLeft) && bottom != null && left != null) {
+                    runPopulators(world, bottomLeft);
+                }
             }
         }).delay(TaskSchedule.tick(1)).schedule();
     }
