@@ -2,19 +2,18 @@ plugins {
     id("java")
 }
 
-group = "ca.spottedleaf"
+group = "dev.emortal"
 version = "1.0.0"
 
 repositories {
-    mavenCentral()
 }
 
 dependencies {
-    compileOnly("net.minestom:minestom:2025.07.27-1.21.8")
+    compileOnly("net.minestom:minestom:26_1-SNAPSHOT")
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21)) // Minestom has a minimum Java version of 21
+        languageVersion.set(JavaLanguageVersion.of(25)) // Minestom has a minimum Java version of 21
     }
 }
