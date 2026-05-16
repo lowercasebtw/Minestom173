@@ -25,6 +25,8 @@ public interface WorldContext {
 
     void setBiome(final int chunkX, final int chunkZ, final RegistryKey<Biome> biome);
 
+    Random random();
+
     final class LightGetter {
         private final Instance instance;
 
