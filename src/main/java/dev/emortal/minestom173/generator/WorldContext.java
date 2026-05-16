@@ -8,47 +8,24 @@ import net.minestom.server.world.biome.Biome;
 
 import java.util.Random;
 
-public record WorldContext(Block.Getter blockGetter, Block.Setter blockSetter, Biome.Setter biomeSetter,
-                           LightGetter lightGetter, Random random) {
-    public WorldContext(final Chunk chunk, final Instance instance, final Random random) {
-        this(chunk, chunk, chunk, new LightGetter(instance), random);
-    }
+public interface WorldContext {
+    Block getBlock(final int blockX, final int blockY, final int blockZ, final Block.Getter.Condition condition);
 
-    public Block getBlock(final int blockX, final int blockY, final int blockZ, final Block.Getter.Condition condition) {
-        return this.blockGetter.getBlock(blockX, blockY, blockZ, condition);
-    }
+    Block getBlock(final int blockX, final int blockY, final int blockZ);
 
-    public Block getBlock(final int blockX, final int blockY, final int blockZ) {
-        return this.blockGetter.getBlock(blockX, blockY, blockZ);
-    }
+    Block getBlock(final int index);
 
-    public Block getBlock(final int index) {
-        return this.getBlock(index >>> 11, index & 127, (index >>> 7) & 15, Block.Getter.Condition.TYPE);
-    }
+    void setBlock(final int blockX, final int blockY, final int blockZ, final Block block);
 
-    public void setBlock(final int blockX, final int blockY, final int blockZ, final Block block) {
-        this.blockSetter.setBlock(blockX, blockY, blockZ, block);
-    }
+    void setBlock(final int index, final Block block);
 
-    public void setBlock(final int index, final Block block) {
-        this.setBlock(index >>> 11, index & 127, (index >>> 7) & 15, block);
-    }
+    int getSkyLight(final int blockX, final int blockY, final int blockZ);
 
-    public int getSkyLight(final int blockX, final int blockY, final int blockZ) {
-        return this.lightGetter.getSkyLight(blockX, blockY, blockZ);
-    }
+    int getBlockLight(final int blockX, final int blockY, final int blockZ);
 
-    public int getBlockLight(final int blockX, final int blockY, final int blockZ) {
-        return this.lightGetter.getBlockLight(blockX, blockY, blockZ);
-    }
+    void setBiome(final int chunkX, final int chunkZ, final RegistryKey<Biome> biome);
 
-    public void setBiome(final int chunkX, final int chunkZ, final RegistryKey<Biome> biome) {
-        for (int y = 0; y < 128; ++y) {
-            this.biomeSetter.setBiome(chunkX, y, chunkZ, biome);
-        }
-    }
-
-    public static final class LightGetter {
+    final class LightGetter {
         private final Instance instance;
 
         public LightGetter(final Instance instance) {
@@ -61,6 +38,55 @@ public record WorldContext(Block.Getter blockGetter, Block.Setter blockSetter, B
 
         public int getBlockLight(final int blockX, final int blockY, final int blockZ) {
             return this.instance.getBlockLight(blockX, blockY, blockZ);
+        }
+    }
+
+    record Impl(Block.Getter blockGetter, Block.Setter blockSetter, Biome.Setter biomeSetter,
+                LightGetter lightGetter, Random random) implements WorldContext {
+        public Impl(final Chunk chunk, final Instance instance, final Random random) {
+            this(chunk, chunk, chunk, new LightGetter(instance), random);
+        }
+
+        @Override
+        public Block getBlock(final int blockX, final int blockY, final int blockZ, final Block.Getter.Condition condition) {
+            return this.blockGetter.getBlock(blockX, blockY, blockZ, condition);
+        }
+
+        @Override
+        public Block getBlock(final int blockX, final int blockY, final int blockZ) {
+            return this.blockGetter.getBlock(blockX, blockY, blockZ);
+        }
+
+        @Override
+        public Block getBlock(final int index) {
+            return this.getBlock(index >>> 11, index & 127, (index >>> 7) & 15, Block.Getter.Condition.TYPE);
+        }
+
+        @Override
+        public void setBlock(final int blockX, final int blockY, final int blockZ, final Block block) {
+            this.blockSetter.setBlock(blockX, blockY, blockZ, block);
+        }
+
+        @Override
+        public void setBlock(final int index, final Block block) {
+            this.setBlock(index >>> 11, index & 127, (index >>> 7) & 15, block);
+        }
+
+        @Override
+        public int getSkyLight(final int blockX, final int blockY, final int blockZ) {
+            return this.lightGetter.getSkyLight(blockX, blockY, blockZ);
+        }
+
+        @Override
+        public int getBlockLight(final int blockX, final int blockY, final int blockZ) {
+            return this.lightGetter.getBlockLight(blockX, blockY, blockZ);
+        }
+
+        @Override
+        public void setBiome(final int chunkX, final int chunkZ, final RegistryKey<Biome> biome) {
+            for (int y = 0; y < 128; ++y) {
+                this.biomeSetter.setBiome(chunkX, y, chunkZ, biome);
+            }
         }
     }
 }

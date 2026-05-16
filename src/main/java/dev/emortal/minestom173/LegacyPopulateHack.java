@@ -13,7 +13,7 @@ import net.minestom.server.timer.TaskSchedule;
 
 import java.util.Objects;
 
-public class LegacyPopulateHack {
+public final class LegacyPopulateHack {
     private static final Tag<Boolean> HAS_POPULATED = Tag.Boolean("hasPopulated");
 
     private static void setHasPopulated(final Chunk chunk, final boolean value) {
@@ -29,15 +29,15 @@ public class LegacyPopulateHack {
         setHasPopulated(chunk, true);
 
         final AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
-        generator.populateChunk(new WorldContext(world, batch, world, new WorldContext.LightGetter(world), generator.getRandom()), chunk.getChunkX(), chunk.getChunkZ());
+        generator.populateChunk(new WorldContext.Impl(world, batch, world, new WorldContext.LightGetter(world), generator.getRandom()), chunk.getChunkX(), chunk.getChunkZ());
         batch.apply(world, null);
     }
 
-    public static void registerEvents(EventNode<InstanceEvent> eventNode) {
+    public static void registerEvents(final EventNode<InstanceEvent> eventNode) {
         eventNode.addListener(InstanceChunkLoadEvent.class, LegacyPopulateHack::handleEvent);
     }
 
-    private static void handleEvent(InstanceChunkLoadEvent event) {
+    private static void handleEvent(final InstanceChunkLoadEvent event) {
         event.getInstance().scheduler().buildTask(() -> {
             final InstanceContainer world = (InstanceContainer) event.getInstance();
             final ChunkLoader generator = world.getChunkLoader();

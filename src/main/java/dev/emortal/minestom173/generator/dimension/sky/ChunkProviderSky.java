@@ -533,7 +533,7 @@ public class ChunkProviderSky implements ChunkLoader, OldChunkGenerator {
     @Override
     public @Nullable Chunk loadChunk(final @NotNull Instance instance, final int chunkX, final int chunkZ) {
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
-        generateUnpopulatedChunkData(new WorldContext(chunk, instance, this.random), chunkX, chunkZ);
+        generateUnpopulatedChunkData(new WorldContext.Impl(chunk, instance, this.random), chunkX, chunkZ);
         return chunk;
     }
 
