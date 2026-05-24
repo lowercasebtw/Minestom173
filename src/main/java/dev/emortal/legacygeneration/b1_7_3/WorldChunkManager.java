@@ -8,7 +8,7 @@ public class WorldChunkManager {
     public double[] temperature;
     public double[] rain;
     public double[] c;
-    public BiomeBase[] d;
+    public BiomeBase173[] d;
     private NoiseGeneratorOctaves2 e;
     private NoiseGeneratorOctaves2 f;
     private NoiseGeneratorOctaves2 g;
@@ -22,11 +22,11 @@ public class WorldChunkManager {
         this.g = new NoiseGeneratorOctaves2(new Random(seed * 543321L), 2);
     }
 
-    public BiomeBase getBiome(int blockX, int blockZ) {
+    public BiomeBase173 getBiome(int blockX, int blockZ) {
         return this.getBiomeData(blockX, blockZ, 1, 1)[0];
     }
 
-    public BiomeBase[] getBiomeData(int i, int j, int k, int l) {
+    public BiomeBase173[] getBiomeData(int i, int j, int k, int l) {
         this.d = this.getBiomeNoise(this.d, i, j, k, l);
         return this.d;
     }
@@ -36,8 +36,8 @@ public class WorldChunkManager {
             into = new double[sizeX * sizeZ];
         }
 
-        into = this.e.a(into, startX, startZ, sizeX, sizeZ, 0.02500000037252903D, 0.02500000037252903D, 0.25D);
-        this.c = this.g.a(this.c, startX, startZ, sizeX, sizeZ, 0.25D, 0.25D, 0.5882352941176471D);
+        into = this.e.generateNoise(into, startX, startZ, sizeX, sizeZ, 0.02500000037252903D, 0.02500000037252903D, 0.25D);
+        this.c = this.g.generateNoise(this.c, startX, startZ, sizeX, sizeZ, 0.25D, 0.25D, 0.5882352941176471D);
         int i1 = 0;
 
         for (int j1 = 0; j1 < sizeX; ++j1) {
@@ -63,14 +63,14 @@ public class WorldChunkManager {
         return into;
     }
 
-    public BiomeBase[] getBiomeNoise(BiomeBase[] into, int startX, int startZ, int sizeX, int sizeZ) {
+    public BiomeBase173[] getBiomeNoise(BiomeBase173[] into, int startX, int startZ, int sizeX, int sizeZ) {
         if (into == null || into.length < sizeX * sizeZ) {
-            into = new BiomeBase[sizeX * sizeZ];
+            into = new BiomeBase173[sizeX * sizeZ];
         }
 
-        this.temperature = this.e.a(this.temperature, startX, startZ, sizeX, sizeX, 0.02500000037252903D, 0.02500000037252903D, 0.25D);
-        this.rain = this.f.a(this.rain, startX, startZ, sizeX, sizeX, 0.05000000074505806D, 0.05000000074505806D, 0.3333333333333333D);
-        this.c = this.g.a(this.c, startX, startZ, sizeX, sizeX, 0.25D, 0.25D, 0.5882352941176471D);
+        this.temperature = this.e.generateNoise(this.temperature, startX, startZ, sizeX, sizeX, 0.02500000037252903D, 0.02500000037252903D, 0.25D);
+        this.rain = this.f.generateNoise(this.rain, startX, startZ, sizeX, sizeX, 0.05000000074505806D, 0.05000000074505806D, 0.3333333333333333D);
+        this.c = this.g.generateNoise(this.c, startX, startZ, sizeX, sizeX, 0.25D, 0.25D, 0.5882352941176471D);
         int i1 = 0;
 
         for (int j1 = 0; j1 < sizeX; ++j1) {
@@ -103,7 +103,7 @@ public class WorldChunkManager {
 
                 this.temperature[i1] = d3;
                 this.rain[i1] = d4;
-                into[i1++] = BiomeBase.get(d3, d4);
+                into[i1++] = BiomeBase173.get(d3, d4);
             }
         }
 

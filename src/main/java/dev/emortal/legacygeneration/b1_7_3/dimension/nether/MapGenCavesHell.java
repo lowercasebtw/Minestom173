@@ -1,8 +1,8 @@
 package dev.emortal.legacygeneration.b1_7_3.dimension.nether;
 
 import dev.emortal.legacygeneration.b1_7_3.MapGenBase;
-import dev.emortal.legacygeneration.util.WorldContext;
 import dev.emortal.legacygeneration.util.MathHelper;
+import dev.emortal.legacygeneration.util.WorldContext;
 import net.minestom.server.instance.block.Block;
 
 import java.util.Random;

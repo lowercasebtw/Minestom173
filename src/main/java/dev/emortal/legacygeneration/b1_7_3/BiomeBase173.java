@@ -1,13 +1,14 @@
 package dev.emortal.legacygeneration.b1_7_3;
 
 import dev.emortal.legacygeneration.b1_7_3.populator.*;
+import dev.emortal.legacygeneration.util.WorldGenerator;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.world.biome.Biome;
 
 import java.util.Random;
 
-public enum BiomeBase {
+public enum BiomeBase173 {
 
     RAINFOREST(Biome.JUNGLE) {
         @Override
@@ -38,7 +39,7 @@ public enum BiomeBase {
     HELL(Biome.NETHER_WASTES),
     SKY(Biome.THE_VOID);
 
-    static final BiomeBase[] LOOKUP = new BiomeBase[64 * 64];
+    static final BiomeBase173[] LOOKUP = new BiomeBase173[64 * 64];
 
     static {
         for (int i = 0; i < 64; ++i) {
@@ -52,22 +53,22 @@ public enum BiomeBase {
     public final Block top;
     public final Block bottom;
 
-    BiomeBase(RegistryKey<Biome> biome) {
+    BiomeBase173(RegistryKey<Biome> biome) {
         this(biome, Block.GRASS_BLOCK, Block.DIRT);
     }
 
-    BiomeBase(RegistryKey<Biome> biome, Block top, Block bottom) {
+    BiomeBase173(RegistryKey<Biome> biome, Block top, Block bottom) {
         this.biome = biome;
         this.top = top;
         this.bottom = bottom;
     }
 
-    public static BiomeBase getByRainTempUncached(float f, float f1) {
+    public static BiomeBase173 getByRainTempUncached(float f, float f1) {
         f1 *= f;
         return f < 0.1F ? TUNDRA : (f1 < 0.2F ? (f < 0.5F ? TUNDRA : (f < 0.95F ? SAVANNA : DESERT)) : (f1 > 0.5F && f < 0.7F ? SWAMPLAND : (f < 0.5F ? TAIGA : (f < 0.97F ? (f1 < 0.35F ? SHRUBLAND : FOREST) : (f1 < 0.45F ? PLAINS : (f1 < 0.9F ? SEASONAL_FOREST : RAINFOREST))))));
     }
 
-    public static BiomeBase get(double temp, double rain) {
+    public static BiomeBase173 get(double temp, double rain) {
         int i = (int) (temp * 63.0D);
         int j = (int) (rain * 63.0D);
         return LOOKUP[i + j * 64];

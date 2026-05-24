@@ -23,6 +23,8 @@ public interface WorldContext {
 
     int getBlockLight(final int blockX, final int blockY, final int blockZ);
 
+    Biome getBiome(final int chunkX, final int chunkZ);
+
     void setBiome(final int chunkX, final int chunkZ, final RegistryKey<Biome> biome);
 
     Random random();

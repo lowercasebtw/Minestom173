@@ -4,23 +4,18 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class NoiseGeneratorOctaves2 {
-    private final NoiseGenerator2[] a;
-    private final int b;
+    private final NoiseGenerator2[] noiseGenerators;
+    private final int totalNoiseGenerators;
 
-    public NoiseGeneratorOctaves2(Random random, int i) {
-        this.b = i;
-        this.a = new NoiseGenerator2[i];
-
-        for (int j = 0; j < i; ++j) {
-            this.a[j] = new NoiseGenerator2(random);
+    public NoiseGeneratorOctaves2(final Random random, final int totalGenerators) {
+        this.totalNoiseGenerators = totalGenerators;
+        this.noiseGenerators = new NoiseGenerator2[totalGenerators];
+        for (int j = 0; j < totalGenerators; ++j) {
+            this.noiseGenerators[j] = new NoiseGenerator2(random);
         }
     }
 
-    public double[] a(double[] adouble, double d0, double d1, int i, int j, double d2, double d3, double d4) {
-        return this.a(adouble, d0, d1, i, j, d2, d3, d4, 0.5D);
-    }
-
-    public double[] a(double[] adouble, double d0, double d1, int i, int j, double d2, double d3, double d4, double d5) {
+    public double[] generateNoise(double[] adouble, double d0, double d1, int i, int j, double d2, double d3, double d4, double d5) {
         d2 /= 1.5D;
         d3 /= 1.5D;
         if (adouble != null && adouble.length >= i * j) {
@@ -31,8 +26,8 @@ public class NoiseGeneratorOctaves2 {
 
         double d6 = 1.0D;
         double d7 = 1.0D;
-        for (int l = 0; l < this.b; ++l) {
-            this.a[l].a(adouble, d0, d1, i, j, d2 * d7, d3 * d7, 0.55D / d6);
+        for (int l = 0; l < this.totalNoiseGenerators; ++l) {
+            this.noiseGenerators[l].a(adouble, d0, d1, i, j, d2 * d7, d3 * d7, 0.55D / d6);
             d7 *= d4;
             d6 *= d5;
         }
@@ -40,4 +35,7 @@ public class NoiseGeneratorOctaves2 {
         return adouble;
     }
 
+    public double[] generateNoise(double[] adouble, double d0, double d1, int i, int j, double d2, double d3, double d4) {
+        return this.generateNoise(adouble, d0, d1, i, j, d2, d3, d4, 0.5D);
+    }
 }

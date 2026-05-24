@@ -1,6 +1,6 @@
 package dev.emortal.legacygeneration.b1_7_3.dimension.overworld;
 
-import dev.emortal.legacygeneration.b1_7_3.BiomeBase;
+import dev.emortal.legacygeneration.b1_7_3.BiomeBase173;
 import dev.emortal.legacygeneration.b1_7_3.ChunkGenerator173;
 import dev.emortal.legacygeneration.b1_7_3.MapGenBase;
 import dev.emortal.legacygeneration.b1_7_3.WorldChunkManager;
@@ -8,6 +8,7 @@ import dev.emortal.legacygeneration.b1_7_3.noise.NoiseGeneratorOctaves;
 import dev.emortal.legacygeneration.b1_7_3.populator.*;
 import dev.emortal.legacygeneration.util.LegacyUtil;
 import dev.emortal.legacygeneration.util.WorldContext;
+import dev.emortal.legacygeneration.util.WorldGenerator;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkLoader;
 import net.minestom.server.instance.Instance;
@@ -44,7 +45,7 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
     private double[] terrainNoise4;
     private double[] terrainNoise5;
     private double[] snowNoise;
-    private BiomeBase[] biomeNoiseCache;
+    private BiomeBase173[] biomeNoiseCache;
 
     public ChunkProviderOverworld(int minHeight, int maxHeight, long seed) {
         this.seed = seed;
@@ -128,7 +129,7 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
     }
 
     // turns base terrain into the biome dependent terrain
-    public void generateBiomeTerrain(final WorldContext worldContext, final int chunkX, final int chunkZ, final BiomeBase[] biomeCache) {
+    public void generateBiomeTerrain(final WorldContext worldContext, final int chunkX, final int chunkZ, final BiomeBase173[] biomeCache) {
         byte b0 = 64;
         double d0 = 0.03125D;
         this.sandNoise = this.sandAndGravelNoiseGenerator.generateNoise(this.sandNoise, chunkX * 16, chunkZ * 16, 0.0D, 16, 16, 1, d0, d0, 1.0D);
@@ -136,7 +137,7 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
         this.stoneNoise = this.stoneNoiseGenerator.generateNoise(this.stoneNoise, chunkX * 16, chunkZ * 16, 0.0D, 16, 16, 1, d0 * 2.0D, d0 * 2.0D, d0 * 2.0D);
         for (int k = 0; k < 16; ++k) {
             for (int l = 0; l < 16; ++l) {
-                BiomeBase biomebase = biomeCache[k + l * 16];
+                BiomeBase173 biomebase = biomeCache[k + l * 16];
                 boolean flag = this.sandNoise[k + l * 16] + this.random.nextDouble() * 0.2D > 0.0D;
                 boolean flag1 = this.gravelNoise[k + l * 16] + this.random.nextDouble() * 0.2D > 3.0D;
                 int i1 = (int) (this.stoneNoise[k + l * 16] / 3.0D + 3.0D + this.random.nextDouble() * 0.25D);
@@ -310,7 +311,7 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
         this.biomeNoiseCache = this.worldChunkManager.getBiomeNoise(this.biomeNoiseCache, chunkX * 16, chunkZ * 16, 16, 16);
         for (int z = 0; z <= 15; ++z) {
             for (int x = 0; x <= 15; ++x) {
-                final BiomeBase biomeBase = this.biomeNoiseCache[z | (x << 4)];
+                final BiomeBase173 biomeBase = this.biomeNoiseCache[z | (x << 4)];
                 worldContext.setBiome(x, z, biomeBase.biome);
             }
         }
@@ -326,7 +327,7 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
 
         int k = chunkX * 16;
         int l = chunkZ * 16;
-        BiomeBase biomebase = this.worldChunkManager.getBiome(k + 16, l + 16);
+        BiomeBase173 biomebase = this.worldChunkManager.getBiome(k + 16, l + 16);
 
         this.random.setSeed(this.seed);
         long i1 = this.random.nextLong() / 2L * 2L + 1L;
@@ -433,31 +434,31 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
             ++l1;
         }
 
-        if (biomebase == BiomeBase.FOREST) {
+        if (biomebase == BiomeBase173.FOREST) {
             l1 += k1 + 5;
         }
 
-        if (biomebase == BiomeBase.RAINFOREST) {
+        if (biomebase == BiomeBase173.RAINFOREST) {
             l1 += k1 + 5;
         }
 
-        if (biomebase == BiomeBase.SEASONAL_FOREST) {
+        if (biomebase == BiomeBase173.SEASONAL_FOREST) {
             l1 += k1 + 2;
         }
 
-        if (biomebase == BiomeBase.TAIGA) {
+        if (biomebase == BiomeBase173.TAIGA) {
             l1 += k1 + 5;
         }
 
-        if (biomebase == BiomeBase.DESERT) {
+        if (biomebase == BiomeBase173.DESERT) {
             l1 -= 20;
         }
 
-        if (biomebase == BiomeBase.TUNDRA) {
+        if (biomebase == BiomeBase173.TUNDRA) {
             l1 -= 20;
         }
 
-        if (biomebase == BiomeBase.PLAINS) {
+        if (biomebase == BiomeBase173.PLAINS) {
             l1 -= 20;
         }
 
@@ -474,19 +475,19 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
 
         byte b0 = 0;
 
-        if (biomebase == BiomeBase.FOREST) {
+        if (biomebase == BiomeBase173.FOREST) {
             b0 = 2;
         }
 
-        if (biomebase == BiomeBase.SEASONAL_FOREST) {
+        if (biomebase == BiomeBase173.SEASONAL_FOREST) {
             b0 = 4;
         }
 
-        if (biomebase == BiomeBase.TAIGA) {
+        if (biomebase == BiomeBase173.TAIGA) {
             b0 = 2;
         }
 
-        if (biomebase == BiomeBase.PLAINS) {
+        if (biomebase == BiomeBase173.PLAINS) {
             b0 = 3;
         }
 
@@ -502,23 +503,23 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
 
         byte b1 = 0;
 
-        if (biomebase == BiomeBase.FOREST) {
+        if (biomebase == BiomeBase173.FOREST) {
             b1 = 2;
         }
 
-        if (biomebase == BiomeBase.RAINFOREST) {
+        if (biomebase == BiomeBase173.RAINFOREST) {
             b1 = 10;
         }
 
-        if (biomebase == BiomeBase.SEASONAL_FOREST) {
+        if (biomebase == BiomeBase173.SEASONAL_FOREST) {
             b1 = 2;
         }
 
-        if (biomebase == BiomeBase.TAIGA) {
+        if (biomebase == BiomeBase173.TAIGA) {
             b1 = 1;
         }
 
-        if (biomebase == BiomeBase.PLAINS) {
+        if (biomebase == BiomeBase173.PLAINS) {
             b1 = 10;
         }
 
@@ -528,7 +529,7 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
         for (k2 = 0; k2 < b1; ++k2) {
             Block b2 = Block.SHORT_GRASS;
 
-            if (biomebase == BiomeBase.RAINFOREST && this.random.nextInt(3) != 0) {
+            if (biomebase == BiomeBase173.RAINFOREST && this.random.nextInt(3) != 0) {
                 b2 = Block.FERN;
             }
 
@@ -539,7 +540,7 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
         }
 
         b1 = 0;
-        if (biomebase == BiomeBase.DESERT) {
+        if (biomebase == BiomeBase173.DESERT) {
             b1 = 2;
         }
 
@@ -586,7 +587,7 @@ public class ChunkProviderOverworld implements ChunkLoader, ChunkGenerator173 {
         }
 
         k2 = 0;
-        if (biomebase == BiomeBase.DESERT) {
+        if (biomebase == BiomeBase173.DESERT) {
             k2 += 10;
         }
 

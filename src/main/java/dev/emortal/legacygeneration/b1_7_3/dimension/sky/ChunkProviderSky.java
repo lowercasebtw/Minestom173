@@ -1,6 +1,6 @@
 package dev.emortal.legacygeneration.b1_7_3.dimension.sky;
 
-import dev.emortal.legacygeneration.b1_7_3.BiomeBase;
+import dev.emortal.legacygeneration.b1_7_3.BiomeBase173;
 import dev.emortal.legacygeneration.b1_7_3.ChunkGenerator173;
 import dev.emortal.legacygeneration.b1_7_3.MapGenBase;
 import dev.emortal.legacygeneration.b1_7_3.dimension.nether.WorldChunkManagerHell;
@@ -9,6 +9,7 @@ import dev.emortal.legacygeneration.b1_7_3.noise.NoiseGeneratorOctaves;
 import dev.emortal.legacygeneration.b1_7_3.populator.*;
 import dev.emortal.legacygeneration.util.LegacyUtil;
 import dev.emortal.legacygeneration.util.WorldContext;
+import dev.emortal.legacygeneration.util.WorldGenerator;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkLoader;
 import net.minestom.server.instance.Instance;
@@ -45,13 +46,13 @@ public class ChunkProviderSky implements ChunkLoader, ChunkGenerator173 {
     private double[] terrainNoise4;
     private double[] terrainNoise5;
     private double[] snowNoise;
-    private BiomeBase[] biomeNoiseCache;
+    private BiomeBase173[] biomeNoiseCache;
 
     public ChunkProviderSky(final int minHeight, final int maxHeight, final long seed) {
         this.seed = seed;
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
-        this.worldChunkManager = new WorldChunkManagerHell(BiomeBase.SKY, 0.5, 0.0);
+        this.worldChunkManager = new WorldChunkManagerHell(BiomeBase173.SKY, 0.5, 0.0);
         this.random = new Random(seed);
         this.terrainNoise2Generator = new NoiseGeneratorOctaves(this.random, 16);
         this.terrainNoise3Generator = new NoiseGeneratorOctaves(this.random, 16);
@@ -119,7 +120,7 @@ public class ChunkProviderSky implements ChunkLoader, ChunkGenerator173 {
     }
 
     // turns base terrain into the biome dependent terrain
-    public void generateBiomeTerrain(final WorldContext worldContext, final int chunkX, final int chunkZ, final BiomeBase[] biomeCache) {
+    public void generateBiomeTerrain(final WorldContext worldContext, final int chunkX, final int chunkZ, final BiomeBase173[] biomeCache) {
         double d0 = 0.03125D;
 
         this.sandNoise = this.sandAndGravelNoiseGenerator.generateNoise(this.sandNoise, chunkX * 16, chunkZ * 16, 0.0D, 16, 16, 1, d0, d0, 1.0D);
@@ -128,7 +129,7 @@ public class ChunkProviderSky implements ChunkLoader, ChunkGenerator173 {
 
         for (int k = 0; k < 16; ++k) {
             for (int l = 0; l < 16; ++l) {
-                BiomeBase biomebase = biomeCache[k + l * 16];
+                BiomeBase173 biomebase = biomeCache[k + l * 16];
                 int i1 = (int) (this.stoneNoise[k + l * 16] / 3.0D + 3.0D + this.random.nextDouble() * 0.25D);
                 int j1 = -1;
                 Block b0 = biomebase.top;
@@ -272,7 +273,7 @@ public class ChunkProviderSky implements ChunkLoader, ChunkGenerator173 {
         this.biomeNoiseCache = this.worldChunkManager.getBiomeNoise(this.biomeNoiseCache, chunkX * 16, chunkZ * 16, 16, 16);
         for (int z = 0; z <= 15; ++z) {
             for (int x = 0; x <= 15; ++x) {
-                final BiomeBase base = this.biomeNoiseCache[z | (x << 4)];
+                final BiomeBase173 base = this.biomeNoiseCache[z | (x << 4)];
                 worldContext.setBiome(x, z, base.biome);
             }
         }
@@ -288,7 +289,7 @@ public class ChunkProviderSky implements ChunkLoader, ChunkGenerator173 {
 
         int k = chunkX * 16;
         int l = chunkZ * 16;
-        BiomeBase biomebase = this.worldChunkManager.getBiome(k + 16, l + 16);
+        BiomeBase173 biomebase = this.worldChunkManager.getBiome(k + 16, l + 16);
 
         this.random.setSeed(this.seed);
         long i1 = this.random.nextLong() / 2L * 2L + 1L;
@@ -395,31 +396,31 @@ public class ChunkProviderSky implements ChunkLoader, ChunkGenerator173 {
             ++l1;
         }
 
-        if (biomebase == BiomeBase.FOREST) {
+        if (biomebase == BiomeBase173.FOREST) {
             l1 += k1 + 5;
         }
 
-        if (biomebase == BiomeBase.RAINFOREST) {
+        if (biomebase == BiomeBase173.RAINFOREST) {
             l1 += k1 + 5;
         }
 
-        if (biomebase == BiomeBase.SEASONAL_FOREST) {
+        if (biomebase == BiomeBase173.SEASONAL_FOREST) {
             l1 += k1 + 2;
         }
 
-        if (biomebase == BiomeBase.TAIGA) {
+        if (biomebase == BiomeBase173.TAIGA) {
             l1 += k1 + 5;
         }
 
-        if (biomebase == BiomeBase.DESERT) {
+        if (biomebase == BiomeBase173.DESERT) {
             l1 -= 20;
         }
 
-        if (biomebase == BiomeBase.TUNDRA) {
+        if (biomebase == BiomeBase173.TUNDRA) {
             l1 -= 20;
         }
 
-        if (biomebase == BiomeBase.PLAINS) {
+        if (biomebase == BiomeBase173.PLAINS) {
             l1 -= 20;
         }
 
@@ -478,7 +479,7 @@ public class ChunkProviderSky implements ChunkLoader, ChunkGenerator173 {
         }
 
         i2 = 0;
-        if (biomebase == BiomeBase.DESERT) {
+        if (biomebase == BiomeBase173.DESERT) {
             i2 += 10;
         }
 

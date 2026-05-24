@@ -1,28 +1,28 @@
 package dev.emortal.legacygeneration.b1_7_3.dimension.nether;
 
-import dev.emortal.legacygeneration.b1_7_3.BiomeBase;
+import dev.emortal.legacygeneration.b1_7_3.BiomeBase173;
 import dev.emortal.legacygeneration.b1_7_3.WorldChunkManager;
 
 import java.util.Arrays;
 
 public class WorldChunkManagerHell extends WorldChunkManager {
-    private final BiomeBase hellBiome;
+    private final BiomeBase173 hellBiome;
     private final double f;
     private final double g;
 
-    public WorldChunkManagerHell(BiomeBase biomebase, double d0, double d1) {
+    public WorldChunkManagerHell(BiomeBase173 biomebase, double d0, double d1) {
         this.hellBiome = biomebase;
         this.f = d0;
         this.g = d1;
     }
 
     @Override
-    public BiomeBase getBiome(int blockX, int blockZ) {
+    public BiomeBase173 getBiome(int blockX, int blockZ) {
         return this.hellBiome;
     }
 
     @Override
-    public BiomeBase[] getBiomeData(int i, int j, int k, int l) {
+    public BiomeBase173[] getBiomeData(int i, int j, int k, int l) {
         this.d = this.getBiomeNoise(this.d, i, j, k, l);
         return this.d;
     }
@@ -38,9 +38,9 @@ public class WorldChunkManagerHell extends WorldChunkManager {
     }
 
     @Override
-    public BiomeBase[] getBiomeNoise(BiomeBase[] into, int startX, int startZ, int sizeX, int sizeZ) {
+    public BiomeBase173[] getBiomeNoise(BiomeBase173[] into, int startX, int startZ, int sizeX, int sizeZ) {
         if (into == null || into.length < sizeX * sizeZ) {
-            into = new BiomeBase[sizeX * sizeZ];
+            into = new BiomeBase173[sizeX * sizeZ];
         }
 
         if (this.temperature == null || this.temperature.length < sizeX * sizeZ) {

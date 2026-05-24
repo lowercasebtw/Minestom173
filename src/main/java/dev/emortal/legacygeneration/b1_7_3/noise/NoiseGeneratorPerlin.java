@@ -1,5 +1,7 @@
 package dev.emortal.legacygeneration.b1_7_3.noise;
 
+import dev.emortal.legacygeneration.util.MathHelper;
+
 import java.util.Random;
 
 public class NoiseGeneratorPerlin {
@@ -8,7 +10,7 @@ public class NoiseGeneratorPerlin {
     public double b;
     public double c;
 
-    public NoiseGeneratorPerlin(Random random) {
+    public NoiseGeneratorPerlin(final Random random) {
         this.d = new int[512];
         this.a = random.nextDouble() * 256.0D;
         this.b = random.nextDouble() * 256.0D;
@@ -28,7 +30,7 @@ public class NoiseGeneratorPerlin {
         }
     }
 
-    public double a(double x, double y, double z) {
+    public double generateNoise(double x, double y, double z) {
         double var7 = x + this.a;
         double var9 = y + this.b;
         double var11 = z + this.c;
@@ -62,32 +64,29 @@ public class NoiseGeneratorPerlin {
         int var28 = this.d[var16 + 1] + var17;
         int var29 = this.d[var28] + var18;
         int var30 = this.d[var28 + 1] + var18;
-        return this.b(var23, this.b(var21, this.b(var19, this.a(this.d[var26], var7, var9, var11), this.a(this.d[var29], var7 - 1.0D, var9, var11)), this.b(var19, this.a(this.d[var27], var7, var9 - 1.0D, var11), this.a(this.d[var30], var7 - 1.0D, var9 - 1.0D, var11))), this.b(var21, this.b(var19, this.a(this.d[var26 + 1], var7, var9, var11 - 1.0D), this.a(this.d[var29 + 1], var7 - 1.0D, var9, var11 - 1.0D)), this.b(var19, this.a(this.d[var27 + 1], var7, var9 - 1.0D, var11 - 1.0D), this.a(this.d[var30 + 1], var7 - 1.0D, var9 - 1.0D, var11 - 1.0D))));
+        return MathHelper.lerp(var23, MathHelper.lerp(var21, MathHelper.lerp(var19, this.generateNoise(this.d[var26], var7, var9, var11), this.generateNoise(this.d[var29], var7 - 1.0D, var9, var11)), MathHelper.lerp(var19, this.generateNoise(this.d[var27], var7, var9 - 1.0D, var11), this.generateNoise(this.d[var30], var7 - 1.0D, var9 - 1.0D, var11))), MathHelper.lerp(var21, MathHelper.lerp(var19, this.generateNoise(this.d[var26 + 1], var7, var9, var11 - 1.0D), this.generateNoise(this.d[var29 + 1], var7 - 1.0D, var9, var11 - 1.0D)), MathHelper.lerp(var19, this.generateNoise(this.d[var27 + 1], var7, var9 - 1.0D, var11 - 1.0D), this.generateNoise(this.d[var30 + 1], var7 - 1.0D, var9 - 1.0D, var11 - 1.0D))));
     }
 
-    public final double b(double var1, double var3, double var5) {
-        return var3 + var1 * (var5 - var3);
-    }
 
-    public final double a(int var1, double var2, double var4) {
+    public final double generateNoise(int var1, double var2, double var4) {
         int var6 = var1 & 15;
         double var7 = (double) (1 - ((var6 & 8) >> 3)) * var2;
         double var9 = var6 < 4 ? 0.0D : (var6 != 12 && var6 != 14 ? var4 : var2);
         return ((var6 & 1) == 0 ? var7 : -var7) + ((var6 & 2) == 0 ? var9 : -var9);
     }
 
-    public final double a(int var1, double var2, double var4, double var6) {
+    public final double generateNoise(int var1, double var2, double var4, double var6) {
         int var8 = var1 & 15;
         double var9 = var8 < 8 ? var2 : var4;
         double var11 = var8 < 4 ? var4 : (var8 != 12 && var8 != 14 ? var6 : var2);
         return ((var8 & 1) == 0 ? var9 : -var9) + ((var8 & 2) == 0 ? var11 : -var11);
     }
 
-    public double a(double var1, double var3) {
-        return this.a(var1, var3, 0.0D);
+    public double generateNoise(double var1, double var3) {
+        return this.generateNoise(var1, var3, 0.0D);
     }
 
-    public void a(double[] var1, double var2, double var4, double var6, int var8, int var9, int var10, double var11, double var13, double var15, double var17) {
+    public void generateNoise(double[] var1, double var2, double var4, double var6, int var8, int var9, int var10, double var11, double var13, double var15, double var17) {
         int var19;
         int var20;
         double var21;
@@ -132,9 +131,9 @@ public class NoiseGeneratorPerlin {
                     int var47 = this.d[var19] + var31;
                     int var48 = this.d[var46 + 1];
                     var20 = this.d[var48] + var31;
-                    var38 = this.b(var23, this.a(this.d[var47], var21, var25), this.a(this.d[var20], var21 - 1.0D, 0.0D, var25));
-                    var40 = this.b(var23, this.a(this.d[var47 + 1], var21, 0.0D, var25 - 1.0D), this.a(this.d[var20 + 1], var21 - 1.0D, 0.0D, var25 - 1.0D));
-                    double var49 = this.b(var28, var38, var40);
+                    var38 = MathHelper.lerp(var23, this.generateNoise(this.d[var47], var21, var25), this.generateNoise(this.d[var20], var21 - 1.0D, 0.0D, var25));
+                    var40 = MathHelper.lerp(var23, this.generateNoise(this.d[var47 + 1], var21, 0.0D, var25 - 1.0D), this.generateNoise(this.d[var20 + 1], var21 - 1.0D, 0.0D, var25 - 1.0D));
+                    double var49 = MathHelper.lerp(var28, var38, var40);
                     var32 = var33++;
                     var1[var32] += var49 * var42;
                 }
@@ -188,15 +187,15 @@ public class NoiseGeneratorPerlin {
                             int var63 = this.d[var31 + 1] + var57;
                             var33 = this.d[var63] + var50;
                             int var64 = this.d[var63 + 1] + var50;
-                            var42 = this.b(var28, this.a(this.d[var61], var25, var54, var70), this.a(this.d[var33], var25 - 1.0D, var54, var70));
-                            var21 = this.b(var28, this.a(this.d[var62], var25, var54 - 1.0D, var70), this.a(this.d[var64], var25 - 1.0D, var54 - 1.0D, var70));
-                            var69 = this.b(var28, this.a(this.d[var61 + 1], var25, var54, var70 - 1.0D), this.a(this.d[var33 + 1], var25 - 1.0D, var54, var70 - 1.0D));
-                            var23 = this.b(var28, this.a(this.d[var62 + 1], var25, var54 - 1.0D, var70 - 1.0D), this.a(this.d[var64 + 1], var25 - 1.0D, var54 - 1.0D, var70 - 1.0D));
+                            var42 = MathHelper.lerp(var28, this.generateNoise(this.d[var61], var25, var54, var70), this.generateNoise(this.d[var33], var25 - 1.0D, var54, var70));
+                            var21 = MathHelper.lerp(var28, this.generateNoise(this.d[var62], var25, var54 - 1.0D, var70), this.generateNoise(this.d[var64], var25 - 1.0D, var54 - 1.0D, var70));
+                            var69 = MathHelper.lerp(var28, this.generateNoise(this.d[var61 + 1], var25, var54, var70 - 1.0D), this.generateNoise(this.d[var33 + 1], var25 - 1.0D, var54, var70 - 1.0D));
+                            var23 = MathHelper.lerp(var28, this.generateNoise(this.d[var62 + 1], var25, var54 - 1.0D, var70 - 1.0D), this.generateNoise(this.d[var64 + 1], var25 - 1.0D, var54 - 1.0D, var70 - 1.0D));
                         }
 
-                        double var72 = this.b(var58, var42, var21);
-                        double var73 = this.b(var58, var69, var23);
-                        double var74 = this.b(var51, var72, var73);
+                        double var72 = MathHelper.lerp(var58, var42, var21);
+                        double var73 = MathHelper.lerp(var58, var69, var23);
+                        double var74 = MathHelper.lerp(var51, var72, var73);
                         var32 = var19++;
                         var1[var32] += var74 * var66;
                     }

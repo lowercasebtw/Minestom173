@@ -7,11 +7,11 @@ public class NoiseGeneratorOctaves {
     private final NoiseGeneratorPerlin[] noiseGenerators;
     private final int totalNoiseGenerators;
 
-    public NoiseGeneratorOctaves(Random var1, int var2) {
-        this.totalNoiseGenerators = var2;
-        this.noiseGenerators = new NoiseGeneratorPerlin[var2];
-        for (int var3 = 0; var3 < var2; ++var3) {
-            this.noiseGenerators[var3] = new NoiseGeneratorPerlin(var1);
+    public NoiseGeneratorOctaves(final Random random, final int totalGenerators) {
+        this.totalNoiseGenerators = totalGenerators;
+        this.noiseGenerators = new NoiseGeneratorPerlin[totalGenerators];
+        for (int i = 0; i < totalGenerators; ++i) {
+            this.noiseGenerators[i] = new NoiseGeneratorPerlin(random);
         }
     }
 
@@ -19,7 +19,7 @@ public class NoiseGeneratorOctaves {
         double var5 = 0.0D;
         double var7 = 1.0D;
         for (int var9 = 0; var9 < this.totalNoiseGenerators; ++var9) {
-            var5 += this.noiseGenerators[var9].a(var1 * var7, var3 * var7) / var7;
+            var5 += this.noiseGenerators[var9].generateNoise(var1 * var7, var3 * var7) / var7;
             var7 /= 2.0D;
         }
 
@@ -35,7 +35,7 @@ public class NoiseGeneratorOctaves {
 
         double var20 = 1.0D;
         for (int var19 = 0; var19 < this.totalNoiseGenerators; ++var19) {
-            this.noiseGenerators[var19].a(var1, var2, var4, var6, var8, var9, var10, var11 * var20, var13 * var20, var15 * var20, var20);
+            this.noiseGenerators[var19].generateNoise(var1, var2, var4, var6, var8, var9, var10, var11 * var20, var13 * var20, var15 * var20, var20);
             var20 /= 2.0D;
         }
 

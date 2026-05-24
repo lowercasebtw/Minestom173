@@ -1,7 +1,8 @@
 package dev.emortal.legacygeneration.b1_7_3.populator;
 
-import dev.emortal.legacygeneration.util.WorldContext;
 import dev.emortal.legacygeneration.util.LegacyUtil;
+import dev.emortal.legacygeneration.util.WorldContext;
+import dev.emortal.legacygeneration.util.WorldGenerator;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
